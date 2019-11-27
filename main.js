@@ -16,7 +16,7 @@ require([
     });
 
     var moldova = new FeatureLayer({
-        url: "https://services9.arcgis.com/ZGiMxit8DuB3m39w/arcgis/rest/services/moldova/FeatureServer"
+        url: "https://services9.arcgis.com/ZGiMxit8DuB3m39w/arcgis/rest/services/moldova_region/FeatureServer"
     });
 
     map.add(moldova);
