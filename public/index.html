@@ -3,20 +3,87 @@
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Agricultura în Moldova</title>
-  <style>
-    html, body, #viewDiv {
-      padding: 0;
-      margin: 0;
-      height: 100%;
-      width: 100%;
-    }
-  </style>
   
   <link rel="stylesheet" href="https://js.arcgis.com/4.13/esri/css/main.css">
+  <link rel="stylesheet" href="style.css">
   <script src="https://js.arcgis.com/4.13/"></script>
   <script src="./main.js"></script>
 </head>
+
 <body>
-  <div id="viewDiv"></div>
+<div id="viewDiv" class="area"></div>
+<nav class="main-menu">
+  <ul>
+    <li>
+      <a href="#" onclick='alert("Alege Județ");'>
+        <i class="fa fa-map-marker"></i>
+        <span class="nav-text">Alege Județ</span>
+      </a>
+    </li>  
+
+    <li>
+      <a href="#" onclick='alert("Culturi Predominante");'>
+        <i class="fa fa-bar-chart-o"></i>
+        <span class="nav-text">Culturi Predominante</span>
+      </a>
+    </li>
+
+    <li>
+      <a href="#" onclick='alert("Calitatea Solului");'>
+        <i class="fa fa-globe"></i>
+        <span class="nav-text">Calitatea Solului</span>
+      </a>
+    </li>
+
+    <li>
+      <a href="#" onclick='alert("Umiditatea Solului");'>
+        <i class="fa fa-tint"></i>
+        <span class="nav-text">Umiditatea Solului</span>
+      </a>
+    </li>
+
+    <br>
+    <hr>
+
+    <li>
+      <a href="#" onclick='alert("Precipitații");'>
+        <i class="fa fa-cloud"></i>
+        <span class="nav-text">Precipitații</span>
+      </a>
+    </li>
+
+    <li>
+      <a href="#" onclick='alert("Flags");'>
+        <i class="fa fa-flag-checkered"></i>
+        <span class="nav-text">Flags</span>
+      </a>
+    </li>
+
+    
+
+    <li>
+      <a href="#" onclick='alert("Good things");'>
+        <i class="fa fa-check-square"></i>
+        <span class="nav-text">Good things</span>
+      </a>
+    </li>
+
+    <li>
+      <a href="#" onclick='alert("Temperatură");'>
+        <i class="fa fa-sun-o"></i>
+        <span class="nav-text">Temperatură</span>
+      </a>
+    </li>
+  </ul>
+
+  <ul class="logout">
+    <li>
+      <a href="./">
+        <i class="fa fa-repeat"></i>
+        <span class="nav-text">Actualizare</span>
+      </a>
+    </li>
+  </ul>
+</nav>
 </body>
 </html>
