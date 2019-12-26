@@ -14,79 +14,43 @@
 <div id="viewDiv" class="area"></div>
 <nav class="main-menu">
   <ul>
-    <li>
-      <span class="layer" onclick='alert("Alege Județ");'>
+    <li id='judete' onclick='showDropdown()'>
+      <span class="layer" >
         <i class="fa fa-map-marker"></i>
         <span class="nav-text">Alege Județ</span>
       </span>
-      <section class="container">
-          <div class="dropdown dropdown-dark">
-            <select name="two" class="dropdown-select">
-              <option value="">Select…</option>
-              <option value="1">Bacău</option>
-              <option value="2">Botoșani</option>
-              <option value="3">Galați</option>
-              <option value="4">Iași</option>
-              <option value="5">Neamț</option>
-              <option value="6">Suceava</option>
-              <option value="7">Vaslui</option>
-              <option value="8">Vrancea</option>
-            </select>
-          </div>
-        </section>
+      <div id='dropdown' hidden>
+        <ul>
+          <li><a onclick="showDetails(Bacau)" style='font-size: 16px;'>Bacău</a></li>
+          <li><a onclick="showDetails(Botosani)" style='font-size: 16px;'>Botoșani</a></li>
+          <li><a onclick="showDetails(Galati)" style='font-size: 16px;'>Galați</a></li>
+          <li><a onclick="showDetails(Iasi)" style='font-size: 16px;'>Iași</a></li>
+          <li><a onclick="showDetails(Neamt)" style='font-size: 16px;'>Neamț</a></li>
+          <li><a onclick="showDetails(Suceava)" style='font-size: 16px;'>Suceava</a></li>
+          <li><a onclick="showDetails(Vaslui)" style='font-size: 16px;'>Vaslui</a></li>
+          <li><a onclick="showDetails(Vrancea)" style='font-size: 16px;'>Vrancea</a></li>
+        </ul>
+      </div>
     </li>
 
     <li>
-      <span class="layer" onclick='alert("Culturi Predominante");'>
+      <span class="layer" onclick='culturiPredominante()'>
         <i class="fa fa-bar-chart-o"></i>
         <span class="nav-text">Culturi Predominante</span>
       </span>
     </li>
 
     <li>
-      <span class="layer" onclick='alert("Calitatea Solului");'>
+      <span class="layer" onclick='calitateaSolului()'>
         <i class="fa fa-globe"></i>
         <span class="nav-text">Calitatea Solului</span>
       </span>
     </li>
 
     <li>
-      <span class="layer" onclick='alert("Umiditatea Solului");'>
+      <span class="layer" onclick='umiditateaSolului()'>
         <i class="fa fa-tint"></i>
         <span class="nav-text">Umiditatea Solului</span>
-      </span>
-    </li>
-
-    <br>
-    <hr>
-
-    <li>
-      <span class="layer" onclick='alert("Precipitații");'>
-        <i class="fa fa-cloud"></i>
-        <span class="nav-text">Precipitații</span>
-      </span>
-    </li>
-
-    <li>
-      <span class="layer" onclick='alert("Flags");'>
-        <i class="fa fa-flag-checkered"></i>
-        <span class="nav-text">Flags</span>
-      </span>
-    </li>
-
-    
-
-    <li>
-      <span class="layer" onclick='alert("Good things");'>
-        <i class="fa fa-check-square"></i>
-        <span class="nav-text">Good things</span>
-      </span>
-    </li>
-
-    <li>
-      <span class="layer" onclick='alert("Temperatură");'>
-        <i class="fa fa-sun-o"></i>
-        <span class="nav-text">Temperatură</span>
       </span>
     </li>
   </ul>
