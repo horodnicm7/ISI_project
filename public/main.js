@@ -1,3 +1,12 @@
+const Bacau = 1;
+const Botosani = 2;
+const Galati = 3;
+const Iasi = 4;
+const Neamt = 5;
+const Suceava = 6;
+const Vaslui = 7;
+const Vrancea = 8;
+
 require([
     "esri/Map",
     "esri/views/MapView",
@@ -21,3 +30,28 @@ require([
 
     map.add(moldova);
 });
+
+function showDropdown() {
+
+    document.getElementById('dropdown').hidden = !document.getElementById('dropdown').hidden;
+}
+
+function showDetails(county) {
+
+    alert(county);
+}
+
+function culturiPredominante() {
+
+    alert("Culturi Predominante");
+}
+
+function calitateaSolului() {
+
+    alert("Calitatea Solului");
+}
+
+function umiditateaSolului() {
+
+    alert("Umiditatea Solului");
+}
