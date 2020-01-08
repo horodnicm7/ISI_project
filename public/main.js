@@ -25,9 +25,9 @@ require([
         zoom: 7
     });
 
-var moldova = new TileLayer({
-    url: "https://services7.arcgis.com/8UggeJRGvsoPqZKc/arcgis/rest/services/Judete_Romania/MapServer"
-})
+    var moldova = new TileLayer({
+    url: "https://services7.arcgis.com/8UggeJRGvsoPqZKc/arcgis/rest/services/Populatie_Moldova/MapServer"
+    })
 
     // var moldova = new FeatureLayer({
     //     url: "https://services7.arcgis.com/8UggeJRGvsoPqZKc/arcgis/rest/services/Judete_Romania/MapServer"
