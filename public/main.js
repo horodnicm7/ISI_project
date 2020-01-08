@@ -7,19 +7,66 @@ const Suceava = 6;
 const Vaslui = 7;
 const Vrancea = 8;
 
-var fileName = "Judete.zip";
-var map;
+var fileName = "c:\\fakepath\\judete.zip";
+var map_;
 
-var geometry = require("esri.geometry");
+var requestFunc = null;
+var portalUrl = "https://www.arcgis.com";
+var langLib = null;
+var scaleUtilsLib = null;
+var domLib = null;
 
 require([
-    "esri/Map",
-    "esri/views/MapView",
+    "esri/config",
+    "esri/InfoTemplate",
+    "esri/map",
+    "esri/request",
+    "esri/geometry/scaleUtils",
     "esri/layers/FeatureLayer",
-	"esri/geometry/Extent",
-], function(Map, MapView, FeatureLayer, Extent) {
-	//esri.config.defaults.io.proxyUrl = "/arcgisserver/apis/javascript/proxy/proxy.ashx";
-	var initialExtent = new Extent({
+    "esri/renderers/SimpleRenderer",
+    "esri/symbols/PictureMarkerSymbol",
+    "esri/symbols/SimpleFillSymbol",
+    "esri/symbols/SimpleLineSymbol",
+    "dojo/dom",
+    "dojo/json",
+    "dojo/on",
+    "dojo/parser",
+    "dojo/sniff",
+    "dojo/_base/array",
+    "esri/Color",
+    "dojo/_base/lang",
+    "dijit/layout/BorderContainer",
+    "dijit/layout/ContentPane",
+    "dojo/domReady!"
+],
+  function (
+  esriConfig, InfoTemplate, Map, request, scaleUtils, FeatureLayer,
+  SimpleRenderer, PictureMarkerSymbol, SimpleFillSymbol, SimpleLineSymbol,
+  dom, JSON, on, parser, sniff, arrayUtils, Color, lang
+) {
+    parser.parse();
+	esriConfig.defaults.io.proxyUrl = "/proxy/";
+
+    scaleUtilsLib = scaleUtils;
+    requestFunc = request;
+    langLib = lang;
+    domLib = dom;
+
+    map_ = new Map({
+        basemap: "gray"
+    });
+
+    /*map_ = new Map("mapCanvas", {
+        basemap: "gray",
+        center: [-41.647, 36.41],
+        zoom: 3,
+        slider: false
+    });*/
+
+    console.log('cancer');
+    console.log(map_);
+
+	/*var initialExtent = new Extent({
 		"xmin": -14048224.31,
 		"ymin": -564100.20,
 		"xmax": 4776075.51,
@@ -47,54 +94,100 @@ require([
         url: "https://services9.arcgis.com/ZGiMxit8DuB3m39w/arcgis/rest/services/moldova_region/FeatureServer"
     });
 
-	map.add(moldova);
+	map.add(moldova);*/
 });
 
 function generateFeatureCollection(fileName) {
-	var name = fileName.split(".");
+    var name = fileName;
+
+    var params = {
+      'name': name,
+      'targetSR': map.spatialReference,
+      'maxRecordCount': 1000,
+      'enforceInputFileSizeLimit': true,
+      'enforceOutputJsonSizeLimit': true
+    };
+
+    //generalize features for display Here we generalize at 1:40,000 which is approx 10 meters
+    //This should work well when using web mercator.
+    var extent = scaleUtils.getExtentForScale(map_, 40000);
+    var resolution = extent.getWidth() / map_.width;
+    params.generalize = true;
+    params.maxAllowableOffset = resolution;
+    params.reducePrecision = true;
+    params.numberOfDigitsAfterDecimal = 0;
+
+    var myContent = {
+        'filetype': 'shapefile',
+        'publishParameters': JSON.stringify(params),
+        'f': 'json',
+        'callback.html': 'textarea'
+    };
+
+    //use the rest generate operation to generate a feature collection from the zipped shapefile
+    request({
+        url: portalUrl + '/sharing/rest/content/features/generate',
+        content: myContent,
+        form: dom.byId('uploadForm'),
+        handleAs: 'json',
+        load: langLib.hitch(this, function (response) {
+            if (response.error) {
+                errorHandler(response.error);
+                return;
+            }
+            var layerName = response.featureCollection.layers[0].layerDefinition.name;
+            addShapefileToMap(response.featureCollection);
+        }),
+        error: langLib.hitch(this, errorHandler)
+    });
+
 	//Chrome and IE add c:\fakepath to the value - we need to remove it
 	//See this link for more info: http://davidwalsh.name/fakepath
-	name = name[0].replace("c:\\fakepath\\","");
 
-	//Define the input params for generate see the rest doc for details
-	//http://www.arcgis.com/apidocs/rest/index.html?generate.html
-	var params = {
-		'name': name,
-		'targetSR': map.spatialReference,
-		'maxRecordCount': 1000,
-		'enforceInputFileSizeLimit': true,
-		'enforceOutputJsonSizeLimit': true
-	};
-	//generalize features for display Here we generalize at 1:40,000 which is approx 10 meters
-	//This should work well when using web mercator.
-	var extent = geometry.getExtentForScale(map, 40000);
-	var resolution = extent.getWidth() / map.width;
-	params.generalize = true;
-	params.maxAllowableOffset = resolution;
-	params.reducePrecision = true;
-	params.numberOfDigitsAfterDecimal = 0;
+    /*var params = {
+        'name': name,
+        'targetSR': map.spatialReference,
+        'maxRecordCount': 1000,
+        'enforceInputFileSizeLimit': true,
+        'enforceOutputJsonSizeLimit': true
+    };
 
-	var myContent = {
-		'filetype': 'shapefile',
-		'publishParameters': JSON.stringify(params),
-		'f': 'json',
-		'callback.html': 'textarea'
-	};
-	//use the rest generate operation to generate a feature collection from the zipped shapefile
-	esri.request({
-		url: portalUrl + '/sharing/rest/content/features/generate',
-		content: myContent,
-		form: dojo.byId('uploadForm'),
-		handleAs: 'json',
-		load: dojo.hitch(this, function (response) {
-			if (response.error) {
-				console.log('Error on esri request: ', response);
-				return;
-			}
-			addShapefileToMap(response.featureCollection);
-		}),
-		error: dojo.hitch(this, errorHandler)
-	});
+    //generalize features for display Here we generalize at 1:40,000 which is approx 10 meters
+    //This should work well when using web mercator.
+    //var extent = scaleUtils.getExtentForScale(map, 40000);
+    //var resolution = extent.getWidth() / map.width;
+    params.generalize = true;
+    //params.maxAllowableOffset = resolution;
+    params.reducePrecision = true;
+    params.numberOfDigitsAfterDecimal = 0;
+
+    var myContent = {
+        'filetype': 'shapefile',
+        'publishParameters': JSON.stringify(params),
+        'f': 'json',
+        'callback.html': 'textarea'
+    };
+
+    console.log('Sending request');
+    requestFunc({
+        url: portalUrl + '/sharing/rest/content/features/generate',
+        content: myContent,
+        handleAs: 'json',
+        load: lang.hitch(this, function (response) {
+            console.log('Got response');
+            if (response.error) {
+              errorHandler(response.error);
+              return;
+            }
+            var layerName = response.featureCollection.layers[0].layerDefinition.name;
+            addShapefileToMap(response.featureCollection);
+        }),
+        error: lang.hitch(this, errorHandler)
+    });*/
+}
+
+function errorHandler (error) {
+    console.log(error);
 }
 
 function addShapefileToMap(featureCollection) {
@@ -111,15 +204,15 @@ function addShapefileToMap(featureCollection) {
 		});
 		//associate the feature with the popup on click to enable highlight and zoomto
 		dojo.connect(layer,'onClick',function(evt){
-			map.infoWindow.setFeatures([evt.graphic]);
+			map_.infoWindow.setFeatures([evt.graphic]);
 		});
 		//change default symbol if desired. Comment this out and the layer will draw with the default symbology
 		changeRenderer(layer);
 		fullExtent = fullExtent ? fullExtent.union(layer.fullExtent) : layer.fullExtent;
 		layers.push(layer);
 	});
-	map.addLayers(layers);
-	map.setExtent(fullExtent.expand(1.25), true);
+	map_.addLayers(layers);
+	map_.setExtent(fullExtent.expand(1.25), true);
 }
 
 function changeRenderer(layer) {
@@ -152,7 +245,7 @@ function showDropdown() {
 }
 
 function showDetails(county) {
-	alert(county);
+	//alert(county);
 	generateFeatureCollection(fileName);
 }
 
