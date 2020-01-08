@@ -10,8 +10,9 @@ const Vrancea = 8;
 require([
     "esri/Map",
     "esri/views/MapView",
-    "esri/layers/FeatureLayer"
-], function(Map, MapView, FeatureLayer) {
+    "esri/layers/FeatureLayer",
+    "esri/layers/TileLayer"
+], function(Map, MapView, FeatureLayer, TileLayer) {
 
     var map = new Map({
         basemap: "topo-vector"
@@ -24,9 +25,13 @@ require([
         zoom: 7
     });
 
-    var moldova = new FeatureLayer({
-        url: "https://services9.arcgis.com/ZGiMxit8DuB3m39w/arcgis/rest/services/moldova_region/FeatureServer"
-    });
+var moldova = new TileLayer({
+    url: "https://services7.arcgis.com/8UggeJRGvsoPqZKc/arcgis/rest/services/Judete_Romania/MapServer"
+})
+
+    // var moldova = new FeatureLayer({
+    //     url: "https://services7.arcgis.com/8UggeJRGvsoPqZKc/arcgis/rest/services/Judete_Romania/MapServer"
+    // });
 
     map.add(moldova);
 });
