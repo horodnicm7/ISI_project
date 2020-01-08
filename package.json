@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/horodnicm7/ISI_project#readme",
   "dependencies": {
+    "arcgis-js-api": "^4.13",
     "express": "^4.17.1",
     "mongoose": "^5.7.12"
   },

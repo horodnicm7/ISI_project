@@ -7,10 +7,10 @@ const Suceava = 6;
 const Vaslui = 7;
 const Vrancea = 8;
 
-/*var map = new Map({
-		basemap: "topo-vector"
-});*/
+var fileName = "Judete.zip";
 var map;
+
+var geometry = require("esri.geometry");
 
 require([
     "esri/Map",
@@ -18,26 +18,7 @@ require([
     "esri/layers/FeatureLayer",
 	"esri/geometry/Extent",
 ], function(Map, MapView, FeatureLayer, Extent) {
-
-    /*var map = new Map({
-        basemap: "topo-vector"
-    });
-
-    var view = new MapView({
-        container: "viewDiv",
-        map: map,
-        center: [27.6014,47.1585],
-        zoom: 7
-    });
-
-    var moldova = new FeatureLayer({
-        url: "https://services9.arcgis.com/ZGiMxit8DuB3m39w/arcgis/rest/services/moldova_region/FeatureServer"
-    });
-
-    map.add(moldova);*/
 	//esri.config.defaults.io.proxyUrl = "/arcgisserver/apis/javascript/proxy/proxy.ashx";
-	fileName = "Judete.zip";
-
 	var initialExtent = new Extent({
 		"xmin": -14048224.31,
 		"ymin": -564100.20,
@@ -67,11 +48,6 @@ require([
     });
 
 	map.add(moldova);
-
-	//var basemap = new ArcGISTiledMapServiceLayer("http://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer");
-    //map.addLayer(basemap);
-
-	//generateFeatureCollection(fileName);
 });
 
 function generateFeatureCollection(fileName) {
@@ -91,7 +67,7 @@ function generateFeatureCollection(fileName) {
 	};
 	//generalize features for display Here we generalize at 1:40,000 which is approx 10 meters
 	//This should work well when using web mercator.
-	var extent = esri.geometry.getExtentForScale(map,40000);
+	var extent = geometry.getExtentForScale(map, 40000);
 	var resolution = extent.getWidth() / map.width;
 	params.generalize = true;
 	params.maxAllowableOffset = resolution;
@@ -100,7 +76,7 @@ function generateFeatureCollection(fileName) {
 
 	var myContent = {
 		'filetype': 'shapefile',
-		'publishParameters': dojo.toJson(params),
+		'publishParameters': JSON.stringify(params),
 		'f': 'json',
 		'callback.html': 'textarea'
 	};
@@ -177,6 +153,7 @@ function showDropdown() {
 
 function showDetails(county) {
 	alert(county);
+	generateFeatureCollection(fileName);
 }
 
 function culturiPredominante() {
