@@ -59,7 +59,7 @@ router.get('/judete/:id', (req, res) => {
 
 router.post('/judete/:id', (req, res) => {
 
-    const {judet, culturaPredominanta, umiditate, humus, culturi, coordonate} = req.body;
+    const {judet, culturaPredominanta, umiditate, humus, culturi, coordonate, cantitateCulturaPredominanta} = req.body;
 
     Judet.findOne({id: req.params.id}).then(result => {
 
@@ -78,7 +78,8 @@ router.post('/judete/:id', (req, res) => {
                 umiditate: umiditate,
                 humus: humus,
                 culturi: culturi,
-                coordonate: coordonate
+                coordonate: coordonate,
+                cantitateCulturaPredominanta: cantitateCulturaPredominanta
             });
 
             judetNou.save()

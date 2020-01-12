@@ -13,6 +13,10 @@ const judetSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  cantitateCulturaPredominanta: {
+    type: Number,
+    required: true
+  },
   umiditate: {
     type: Number,
     required: true
