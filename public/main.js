@@ -7,6 +7,26 @@ const Suceava = 6;
 const Vaslui = 7;
 const Vrancea = 8;
 
+let culturi = {
+    "Grau": 0,
+    "Orz": 0,
+    "Porumb": 0,
+    "Vie": 0,
+    "Rosii": 0,
+    "Ceapa": 0
+};
+
+let suprafete = {
+    "Suceava": 8553 / 0.01,
+    "Botosani": 4986 / 0.01,
+    "Iasi": 5476 / 0.01,
+    "Neamt": 5897 / 0.01,
+    "Bacau": 6621 / 0.01,
+    "Vaslui": 5318 / 0.01,
+    "Vrancea": 4857 / 0.01,
+    "Galati": 4466 / 0.01
+}
+
 require([
     "esri/Map",
     "esri/views/MapView",
@@ -21,8 +41,7 @@ require([
 
     var moldova = new FeatureLayer({
         url: "https://services5.arcgis.com/SuDSWaJ2Qi7wzabn/arcgis/rest/services/AgriculturaMoldova/FeatureServer",
-        outFields: ["*"]//["Judet", "CultPred1", "CultPred2", "CultPred3", "Humus", "Umiditate"],
-        //renderer: renderer
+        outFields: ["*"]
     })
 
     map.add(moldova);
@@ -41,16 +60,40 @@ require([
             y: event.y
         };
 
-        // Search for graphics at the clicked location
         view.hitTest(screenPoint).then(function (response) {
             if (response.results.length) {
-            var graphic = response.results.filter(function (result) {
-                    // check if the graphic belongs to the layer of interest
-                    return result.graphic.layer === moldova;
-                })[0].graphic;
-                // do something with the result graphic
-                //console.log(response.results.features[0]);
-                console.log(graphic.attributes);
+                var graphic = response.results.filter(function (result) {
+                        return result.graphic.layer === moldova;
+                    })[0].graphic;
+
+                for (var key in culturi) {
+                    culturi[key] = graphic.attributes[key];
+                }
+
+                var items = Object.keys(culturi).map(function(key) {
+                    return [key, culturi[key]];
+                });
+
+                items.sort(function(first, second) {
+                    return second[1] - first[1];
+                });
+
+                var content = "<b>Suprafata totala:</b> " + suprafete[graphic.attributes['JUDET']] + " ha<br>";
+                var i = 0;
+
+                for (const [key, value] of items) {
+                    if (i == 3) {
+                        break;
+                    }
+
+                    content = content + "<b>" + key + ":</b> " + value + " ha<br>";
+                    i += 1;
+                }
+
+                view.popup.open({
+                    title: graphic.attributes['JUDET'],
+                    content: content
+                });
             }
             });
     });
@@ -59,11 +102,6 @@ require([
 function showDropdown() {
 
     document.getElementById('dropdown').hidden = !document.getElementById('dropdown').hidden;
-}
-
-function showDetails(county) {
-
-    alert(county);
 }
 
 function culturiPredominante() {
