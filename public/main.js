@@ -12,6 +12,41 @@ var humusLayer;
 var umiditateLayer;
 var culturiPredominanteLayer;
 
+let coordonate = {
+    Botosani: {
+      "lat": 47.813,
+      "long": 26.835
+    },
+    Suceava: {
+      "lat": 47.537,
+      "long": 25.768
+    },
+    Neamt: {
+      "lat": 46.931,
+      "long": 26.369
+    },
+    Iasi: {
+      "lat": 47.205,
+      "long": 27.275
+    },
+    Vaslui: {
+      "lat": 46.461,
+      "long": 27.731
+    },
+    Bacau: {
+      "lat": 46.397,
+      "long": 26.794
+    },
+    Vrancea: {
+      "lat": 45.789,
+      "long": 27.027
+    },
+    Galati: {
+      "lat": 45.803,
+      "long": 27.841
+    }
+  };
+
 let culturi = {
     "Grau": 0,
     "Orz": 0,
@@ -79,7 +114,6 @@ require([
     });
 
     view.ui.add(new Legend({ view: view }), "bottom-right");
-
 
     view.on("click", function (event) {
         var screenPoint = {
