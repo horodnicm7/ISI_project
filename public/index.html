@@ -3,7 +3,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Agricultura în Moldova</title>
-  
+
   <link rel="stylesheet" href="https://js.arcgis.com/4.13/esri/css/main.css">
   <link rel="stylesheet" href="style.css">
   <script src="https://js.arcgis.com/4.13/"></script>
@@ -14,25 +14,6 @@
 <div id="viewDiv" class="area"></div>
 <nav class="main-menu">
   <ul>
-    <li id='judete' onclick='showDropdown()'>
-      <span class="layer" >
-        <i class="fa fa-map-marker"></i>
-        <span class="nav-text">Alege Județ</span>
-      </span>
-      <div id='dropdown' hidden>
-        <ul>
-          <li><a onclick="showDetails(Bacau)" style='font-size: 16px;'>Bacău</a></li>
-          <li><a onclick="showDetails(Botosani)" style='font-size: 16px;'>Botoșani</a></li>
-          <li><a onclick="showDetails(Galati)" style='font-size: 16px;'>Galați</a></li>
-          <li><a onclick="showDetails(Iasi)" style='font-size: 16px;'>Iași</a></li>
-          <li><a onclick="showDetails(Neamt)" style='font-size: 16px;'>Neamț</a></li>
-          <li><a onclick="showDetails(Suceava)" style='font-size: 16px;'>Suceava</a></li>
-          <li><a onclick="showDetails(Vaslui)" style='font-size: 16px;'>Vaslui</a></li>
-          <li><a onclick="showDetails(Vrancea)" style='font-size: 16px;'>Vrancea</a></li>
-        </ul>
-      </div>
-    </li>
-
     <li>
       <span class="layer" onclick='culturiPredominante()'>
         <i class="fa fa-bar-chart-o"></i>
