@@ -11,21 +11,19 @@ require([
     "esri/Map",
     "esri/views/MapView",
     "esri/layers/FeatureLayer",
-    "esri/layers/TileLayer"
-], function(Map, MapView, FeatureLayer, TileLayer) {
+    "esri/layers/TileLayer",
+    "esri/renderers/ClassBreaksRenderer"
+], function(Map, MapView, FeatureLayer, TileLayer, ClassBreaksRenderer) {
 
     var map = new Map({
         basemap: "topo-vector"
     });
 
     var moldova = new FeatureLayer({
-    url: "https://services5.arcgis.com/SuDSWaJ2Qi7wzabn/arcgis/rest/services/JudeteMoldova/FeatureServer",
-    outFields: ["*"]
+        url: "https://services5.arcgis.com/SuDSWaJ2Qi7wzabn/arcgis/rest/services/AgriculturaMoldova/FeatureServer",
+        outFields: ["*"]//["Judet", "CultPred1", "CultPred2", "CultPred3", "Humus", "Umiditate"],
+        //renderer: renderer
     })
-
-    // var moldova = new FeatureLayer({
-    //     url: "https://services7.arcgis.com/8UggeJRGvsoPqZKc/arcgis/rest/services/Judete_Romania/MapServer"
-    // });
 
     map.add(moldova);
 
@@ -38,23 +36,23 @@ require([
 
 
     view.on("click", function (event) {
-    var screenPoint = {
-        x: event.x,
-        y: event.y
-    };
+        var screenPoint = {
+            x: event.x,
+            y: event.y
+        };
 
-    // Search for graphics at the clicked location
-    view.hitTest(screenPoint).then(function (response) {
-        if (response.results.length) {
-        var graphic = response.results.filter(function (result) {
-                // check if the graphic belongs to the layer of interest
-                return result.graphic.layer === moldova;
-            })[0].graphic;
-            // do something with the result graphic
-            //console.log(response.results.features[0]);
-            console.log(graphic.attributes);
-        }
-        });
+        // Search for graphics at the clicked location
+        view.hitTest(screenPoint).then(function (response) {
+            if (response.results.length) {
+            var graphic = response.results.filter(function (result) {
+                    // check if the graphic belongs to the layer of interest
+                    return result.graphic.layer === moldova;
+                })[0].graphic;
+                // do something with the result graphic
+                //console.log(response.results.features[0]);
+                console.log(graphic.attributes);
+            }
+            });
     });
 });
 
