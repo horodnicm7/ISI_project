@@ -7,6 +7,11 @@ const Suceava = 6;
 const Vaslui = 7;
 const Vrancea = 8;
 
+var moldovaLayer;
+var humusLayer;
+var umiditateLayer;
+var culturiPredominanteLayer;
+
 let culturi = {
     "Grau": 0,
     "Orz": 0,
@@ -32,19 +37,39 @@ require([
     "esri/views/MapView",
     "esri/layers/FeatureLayer",
     "esri/layers/TileLayer",
-    "esri/renderers/ClassBreaksRenderer"
-], function(Map, MapView, FeatureLayer, TileLayer, ClassBreaksRenderer) {
+    "esri/renderers/ClassBreaksRenderer",
+    "esri/widgets/Legend"
+], function(Map, MapView, FeatureLayer, TileLayer, ClassBreaksRenderer, Legend) {
 
     var map = new Map({
         basemap: "topo-vector"
     });
 
-    var moldova = new FeatureLayer({
-        url: "https://services5.arcgis.com/SuDSWaJ2Qi7wzabn/arcgis/rest/services/AgriculturaMoldova/FeatureServer",
+    moldovaLayer = new FeatureLayer({
+        url: "https://services5.arcgis.com/SuDSWaJ2Qi7wzabn/arcgis/rest/services/Judete/FeatureServer",
         outFields: ["*"]
-    })
+    });
 
-    map.add(moldova);
+    humusLayer = new FeatureLayer({
+        url: "https://services5.arcgis.com/SuDSWaJ2Qi7wzabn/arcgis/rest/services/Humus/FeatureServer"
+    });
+    humusLayer.visible = false;
+
+    
+    umiditateLayer = new FeatureLayer({
+        url: "https://services5.arcgis.com/SuDSWaJ2Qi7wzabn/arcgis/rest/services/Umiditate/FeatureServer"
+    });
+    umiditateLayer.visible = false;
+
+    culturiPredominanteLayer = new FeatureLayer({
+        url: "https://services5.arcgis.com/SuDSWaJ2Qi7wzabn/arcgis/rest/services/CulturiPredominante/FeatureServer"
+    });
+    culturiPredominanteLayer.visible = false;
+
+    map.add(moldovaLayer);
+    map.add(humusLayer);
+    map.add(umiditateLayer);
+    map.add(culturiPredominanteLayer);
 
     var view = new MapView({
         container: "viewDiv",
@@ -52,6 +77,8 @@ require([
         center: [27.6014,47.1585],
         zoom: 7
     });
+
+    view.ui.add(new Legend({ view: view }), "bottom-right");
 
 
     view.on("click", function (event) {
@@ -63,7 +90,7 @@ require([
         view.hitTest(screenPoint).then(function (response) {
             if (response.results.length) {
                 var graphic = response.results.filter(function (result) {
-                        return result.graphic.layer === moldova;
+                        return result.graphic.layer === moldovaLayer;
                     })[0].graphic;
 
                 for (var key in culturi) {
@@ -106,15 +133,32 @@ function showDropdown() {
 
 function culturiPredominante() {
 
-    alert("Culturi Predominante");
+    moldovaLayer.visible = false;
+    humusLayer.visible = false;
+    umiditateLayer.visible = false;
+    culturiPredominanteLayer.visible = true;
 }
 
 function calitateaSolului() {
 
-    alert("Calitatea Solului");
+    moldovaLayer.visible = false;
+    humusLayer.visible = true;
+    umiditateLayer.visible = false;
+    culturiPredominanteLayer.visible = false;
 }
 
 function umiditateaSolului() {
 
-    alert("Umiditatea Solului");
+    moldovaLayer.visible = false;
+    humusLayer.visible = false;
+    umiditateLayer.visible = true;
+    culturiPredominanteLayer.visible = false;
+}
+
+function refresh() {
+
+    moldovaLayer.visible = true;
+    humusLayer.visible = false;
+    umiditateLayer.visible = false;
+    culturiPredominanteLayer.visible = false;
 }
