@@ -18,15 +18,9 @@ require([
         basemap: "topo-vector"
     });
 
-    var view = new MapView({
-        container: "viewDiv",
-        map: map,
-        center: [27.6014,47.1585],
-        zoom: 7
-    });
-
-    var moldova = new TileLayer({
-    url: "https://services7.arcgis.com/8UggeJRGvsoPqZKc/arcgis/rest/services/Populatie_Moldova/MapServer"
+    var moldova = new FeatureLayer({
+    url: "https://services5.arcgis.com/SuDSWaJ2Qi7wzabn/arcgis/rest/services/JudeteMoldova/FeatureServer",
+    outFields: ["*"]
     })
 
     // var moldova = new FeatureLayer({
@@ -34,6 +28,34 @@ require([
     // });
 
     map.add(moldova);
+
+    var view = new MapView({
+        container: "viewDiv",
+        map: map,
+        center: [27.6014,47.1585],
+        zoom: 7
+    });
+
+
+    view.on("click", function (event) {
+    var screenPoint = {
+        x: event.x,
+        y: event.y
+    };
+
+    // Search for graphics at the clicked location
+    view.hitTest(screenPoint).then(function (response) {
+        if (response.results.length) {
+        var graphic = response.results.filter(function (result) {
+                // check if the graphic belongs to the layer of interest
+                return result.graphic.layer === moldova;
+            })[0].graphic;
+            // do something with the result graphic
+            //console.log(response.results.features[0]);
+            console.log(graphic.attributes);
+        }
+        });
+    });
 });
 
 function showDropdown() {
